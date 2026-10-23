@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./site.css";
+@import "./legal.css";
+@import "./blogs.css";
+
+/* Self-hosted via @fontsource (see main.jsx); these names feed --font-display / --font-sans in tokens.css. */
+:root {
+  --font-marcellus: "Marcellus";
+  --font-lato: "Lato";
+  --font-cormorant: "Cormorant Garamond";
+  --font-manrope: "Manrope";
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-rule: var(--rule);
+  --font-display: "AvenirLTProMedium", sans-serif;
+  --font-sans: "Lato", var(--font-manrope), "Helvetica Neue", Arial, sans-serif;
+  --radius-*: initial;
+  --radius-round: 9999px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1440px;
+  --breakpoint-xl: 1920px;
+}
