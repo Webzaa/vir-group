@@ -36,12 +36,23 @@ export function preloadHeroSliderImages() {
 export function Preloader() {
   const { pathname } = useLocation();
   const cleanPath = (pathname || '').replace(/\/+$/, '');
-  const isHomePage = cleanPath === '' || cleanPath === '/' || cleanPath === '/vir-group' || cleanPath === '/virgroup' || cleanPath === '/vir-groupv3' || cleanPath === '/vir-groupv7';
+  const isHomePage = cleanPath === '' || cleanPath === '/' || cleanPath === '/vir-group' || cleanPath === '/virgroup' || cleanPath === '/vir-groupv3' || cleanPath === '/vir-groupv10';
 
   const [isVisible, setIsVisible] = useState(isHomePage);
   const [isFading, setIsFading] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
   const videoRef = useRef(null);
   const hasFinishedRef = useRef(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Preload hero banner slider images immediately upon mounting
   useEffect(() => {
@@ -98,38 +109,28 @@ export function Preloader() {
       lenis?.start();
       ScrollTrigger.refresh();
     };
-  }, [isVisible]);
+  }, [isVisible, isMobile]);
 
   if (!isVisible) return null;
 
-  const videoSrc = getMediaUrl('/media/loader.mp4');
+  const videoSrc = getMediaUrl(isMobile ? '/media/mob-loader.mp4' : '/media/loader1.mp4');
 
   return (
-    <div className={`site-preloader ${isFading ? 'is-fading' : ''}`} role="dialog" aria-modal="true" aria-label="Loading VIR Group" >
+    <div className={`site-preloader ${isFading ? 'is-fading' : ''}`} role="dialog" aria-modal="true" aria-label="Loading VIR Group">
       <div className="site-preloader-inner">
-        <div className="site-preloader-brand"
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '14px',
-            zIndex: 1,
-            pointerEvents: 'none',
-          }}
-        >
-          {/* <img
-            src="/media/logo.avif"
-            alt="VIR Group"
-            style={{ width: '150px', height: 'auto', opacity: 0.9 }}
-          /> */}
-        </div>
-
-        <video ref={videoRef} src={videoSrc} autoPlay muted playsInline preload="auto" onEnded={handleComplete} onError={handleComplete} className="site-preloader-video" style={{ position: 'relative', zIndex: 2 }} />
-
+        <video
+          key={isMobile ? 'mob' : 'desk'}
+          ref={videoRef}
+          src={videoSrc}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          onEnded={handleComplete}
+          onError={handleComplete}
+          className="site-preloader-video"
+          style={{ position: 'relative', zIndex: 2 }}
+        />
       </div>
     </div>
   );

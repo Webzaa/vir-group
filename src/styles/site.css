@@ -91,7 +91,7 @@ section[data-theme]{background:var(--surface);color:var(--ink);position:relative
 .datum .q{fill:var(--accent)}.datum .c{fill:var(--surface);stroke:var(--ink);stroke-width:1}
 .lvl-v{font:600 12px/1 var(--font-sans);letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--accent);white-space:nowrap}
 .lvl-r{flex:0 1 120px;height:1px;background:var(--rule)}
-.lvl-n{font:500 13px/1.4 var(--font-sans);color:var(--ink-muted)}
+.lvl-n{font:500 13px/1.4 var(--font-sans);color:var(--ink-muted);white-space:nowrap}
 
 /* ---------- header ---------- */
 .hdr{position:fixed;top:0;left:0;right:0;z-index:999;padding-top:env(safe-area-inset-top,0px);color:#1a1917;background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;border-bottom:1px solid transparent !important;box-shadow:none !important;transition:background .35s ease, border-color .35s ease, color .35s ease, box-shadow .35s ease, backdrop-filter .35s ease, -webkit-backdrop-filter .35s ease, transform .38s cubic-bezier(0.16, 1, 0.3, 1), opacity .35s ease, visibility .35s ease;transform:none !important;opacity:1 !important;visibility:visible !important;pointer-events:auto !important;}
@@ -1178,7 +1178,7 @@ figure{margin:0}
     object-position:center 65%;
   }
   .pj-top-branding{
-    top:clamp(18px, 17.5vh, 107px);
+    top: 12%;
     left:clamp(16px, 4vw, 24px);
     right:clamp(16px, 4vw, 24px);
     transform:none;
@@ -1190,6 +1190,7 @@ figure{margin:0}
     text-align:center;
     user-select: none;
     -webkit-user-select: none;
+    z-index: 25;
   }
   .pj-branding-row{
     width:100%;
@@ -1197,6 +1198,31 @@ figure{margin:0}
     display:flex;
     align-items:center;
     justify-content:center;
+  }
+  .pj-branding-row .lvl{
+    margin-bottom: 2px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    max-width: 100% !important;
+    gap: 10px !important;
+  }
+  .pj-branding-row .lvl-n{
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    font-size: 11.5px !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: rgba(241, 237, 229, 0.85) !important;
+  }
+  .pj-branding-row .lvl-r{
+    flex: 0 1 36px !important;
+    width: 36px !important;
+    min-width: 14px !important;
+    background: rgba(241, 237, 229, 0.45) !important;
   }
   .pj-mobile-all-link{
     position:absolute;
@@ -1215,26 +1241,29 @@ figure{margin:0}
     border:1px solid rgba(255, 255, 255, 0.18);
   }
   .pj-main-title{
-    font:400 clamp(1.3rem, 4.5vw, 1.85rem)/1.1 var(--font-display);
-    margin:3px 0 0;
+    font:400 clamp(1.28rem, 4.2vw, 1.75rem)/1.15 var(--font-display);
+    margin:2px 0 0;
     text-align:center;
+    white-space: nowrap;
+    overflow: visible;
   }
 
-  /* Dedicated mobile HUD card moved down directly above the building */
+  /* Dedicated mobile HUD card moved down cleanly below the title and directly above the building */
   .pj-mobile-card{
     display:block;
     position:absolute;
-    top:auto;
-    bottom:calc(42px + clamp(260px, 55vh, 435px) + 8px);
-    left:clamp(16px, 4vw, 24px);
-    right:clamp(16px, 4vw, 24px);
-    z-index:22;
+    top: 22%;
+    bottom:auto;
+    left:50%;
+    transform:translateX(-50%);
+    right:auto;
+    z-index:24;
     background:rgba(240, 240, 240, 0.95);
     backdrop-filter:blur(24px);
     -webkit-backdrop-filter:blur(24px);
     border:1px solid rgba(255, 255, 255, 0.22);
-    width: 230px;
-    margin: auto;
+    width: min(235px, calc(100vw - 36px));
+    margin: 0;
     border-radius:12px;
     padding:8px 12px;
     box-shadow:0 16px 36px rgba(0, 0, 0, 0.75);
@@ -1242,6 +1271,10 @@ figure{margin:0}
     touch-action: pan-y;
     user-select: none;
     -webkit-user-select: none;
+    transition: opacity 0.25s ease;
+    will-change: opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   .pj-mobile-card::after{
     content:"";
@@ -1318,7 +1351,7 @@ figure{margin:0}
   /* Big image wrapper centered in each slide */
   .pj-tower-img-wrap{
     position:relative;
-    width:clamp(220px, 78vw, 320px);
+    width:clamp(220px, 75vw, 320px);
     height:100%;
     margin:0 auto;
     cursor:pointer;
@@ -2114,8 +2147,6 @@ section[data-level="+06.00"][data-theme="white"] .lvl-v {
 section[data-level="+06.00"][data-theme="white"] .lvl-n {
   color: #586578;
 }
-.lvl-n {
-width: 200px;}
 
 .map-sec .lvl-r,
 section[data-level="+06.00"][data-theme="white"] .lvl-r {
@@ -2250,12 +2281,42 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   gap: 8px;
 }
 
+/* 16:9 Stage Plane: Absolute 1:1 synchronization of map image & pins across every screen size */
+.fullmap-stage-plane {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  aspect-ratio: 16 / 9;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+@media (max-aspect-ratio: 16/9) {
+  .fullmap-stage-plane {
+    height: 100%;
+    width: calc(100vh * (16 / 9));
+    width: calc(100dvh * (16 / 9));
+    min-width: 100%;
+  }
+}
+
+@media (min-aspect-ratio: 16/9) {
+  .fullmap-stage-plane {
+    width: 100%;
+    height: calc(100vw * (9 / 16));
+    height: calc(100dvw * (9 / 16));
+    min-height: 100%;
+  }
+}
+
 .fullmap-google-container {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  min-height: 520px;
   background: #e5e3df;
 }
 
@@ -2264,8 +2325,7 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   height: 100%;
   border: 0;
   display: block;
-  object-fit: cover;
-  object-position: center;
+  object-fit: fill;
   pointer-events: none;
 }
 
@@ -2356,7 +2416,7 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
 }
 
 .fullmap-pin.is-active {
-  transform: translate(-50%, -50%) scale(1.36);
+  transform: translate(-50%, -50%) scale(1.42);
   z-index: 25;
 }
 
@@ -2396,8 +2456,8 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
 /* Inner marker badge with project number */
 .fullmap-pin-badge {
   position: relative;
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: #ffffff;
   border: 2px solid #0e223f;
@@ -2409,7 +2469,7 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
 }
 
 .pin-number {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 800;
   color: #0e223f;
   line-height: 1;
@@ -2435,12 +2495,13 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   position: absolute;
   left: 50%;
   bottom: calc(100% + 10px);
-  transform: translateX(-50%) translateY(4px);
+  transform: translateX(-50%);
   background: rgba(14, 34, 63, 0.96);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #ffffff;
-  padding: 5px 11px;
-  border-radius: 7px;
+  padding: 6px 12px;
+  border-radius: 8px;
   border: 1px solid rgba(212, 175, 55, 0.45);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   display: flex;
@@ -2450,7 +2511,10 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   pointer-events: none;
   opacity: 0;
   z-index: 30;
-  transition: all 0.25s ease;
+  transition: opacity 0.2s ease;
+  will-change: opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .fullmap-pin-tooltip::after {
@@ -2467,7 +2531,6 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
 .fullmap-pin.tooltip-bottom .fullmap-pin-tooltip {
   bottom: auto;
   top: calc(100% + 10px);
-  transform: translateX(-50%) translateY(-4px);
 }
 
 .fullmap-pin.tooltip-bottom .fullmap-pin-tooltip::after {
@@ -2476,9 +2539,31 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   border-color: transparent transparent rgba(14, 34, 63, 0.96) transparent;
 }
 
+/* Left-aligned tooltip so it NEVER cuts off near the left screen edge */
+.fullmap-pin.tooltip-align-left .fullmap-pin-tooltip {
+  left: -8px;
+  transform: translateX(0) !important;
+}
+.fullmap-pin.tooltip-align-left .fullmap-pin-tooltip::after {
+  left: 20px;
+  transform: none;
+}
+
+/* Right-aligned tooltip so it NEVER cuts off near the right screen edge */
+.fullmap-pin.tooltip-align-right .fullmap-pin-tooltip {
+  left: auto;
+  right: -8px;
+  transform: translateX(0) !important;
+}
+.fullmap-pin.tooltip-align-right .fullmap-pin-tooltip::after {
+  left: auto;
+  right: 20px;
+  transform: none;
+}
+
 .tooltip-title {
   font-size: 0.76rem;
-  font-weight: 400;
+  font-weight: 500;
   color: #ffffff;
   letter-spacing: 0.01em;
   line-height: 1.2;
@@ -2555,7 +2640,6 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
 .fullmap-pin:hover .fullmap-pin-tooltip,
 .fullmap-pin.is-active .fullmap-pin-tooltip {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
 }
 
 /* 4. Luxury Glassmorphic HUD Project Card Overlay (Kept hidden per user request) */
@@ -2986,6 +3070,13 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   aspect-ratio: unset !important;
   max-height: none !important;
   overflow: hidden;
+  background: #eaf2f8 !important;
+}
+
+.fullmap-wrapper.fullmap-pinned-mode .fullmap-canvas {
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 @media (max-width: 900px) {
@@ -3002,9 +3093,23 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   }
 
   .fullmap-pin-tooltip {
-    max-width: 160px;
-    white-space: normal;
+    max-width: min(210px, calc(100vw - 32px)) !important;
+    white-space: nowrap;
     text-align: center;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: #0e223f !important;
+  }
+  .fullmap-pin.tooltip-align-left .fullmap-pin-tooltip {
+    text-align: left;
+    left: -8px !important;
+    transform: translateX(0) !important;
+  }
+  .fullmap-pin.tooltip-align-right .fullmap-pin-tooltip {
+    text-align: right;
+    left: auto !important;
+    right: -8px !important;
+    transform: translateX(0) !important;
   }
 
   .fullmap-hud-card {
@@ -3021,44 +3126,9 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
     margin: 0 auto;
   }
 
-  .fullmap-scroll-hint {
-    display: none;
-  }
-
+  .fullmap-scroll-hint,
   .fullmap-pinned-mode .fullmap-scroll-hint {
-    display: inline-flex !important;
-    position: absolute;
-    bottom: 24px;
-    top: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(14, 34, 63, 0.92);
-    color: #ffffff;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(212, 175, 55, 0.35);
-    border-radius: 999px;
-    padding: 7px 16px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    white-space: nowrap;
-    max-width: calc(100% - 32px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-    z-index: 25;
-    pointer-events: none;
-  }
-
-  .fullmap-pinned-mode .fullmap-scroll-hint span:last-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .fullmap-pinned-mode .mouse-wheel-icon {
-    border-color: #d8c280;
-  }
-
-  .fullmap-pinned-mode .mouse-wheel-icon::after {
-    background: #d8c280;
+    display: none !important;
   }
 }
 
@@ -5386,11 +5456,11 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   .proj-dir-wrap #sky {
     height: auto;
     max-height: 38vh;
-    aspect-ratio: 1000 / 400;
+    aspect-ratio: 1150 / 415;
   }
   .proj-dir-wrap .tw text {
-    font-size: 15px !important;
-    letter-spacing: .12em !important;
+    font-size: 10px !important;
+    letter-spacing: .08em !important;
   }
 }
 
@@ -5438,8 +5508,8 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
 
 .proj-dir-wrap .tw text {
   fill: #ffffff;
-  font: 700 11px var(--sans);
-  letter-spacing: .22em;
+  font: 400 13.5px var(--sans);
+  letter-spacing: .09em;
   text-transform: uppercase;
   text-anchor: middle;
   opacity: .95;
@@ -6971,6 +7041,8 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   align-self: flex-start;
   z-index: 10;
   pointer-events: auto;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .fp-sidebar-sticky,
@@ -7248,10 +7320,14 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.16);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  contain: content;
 }
 
 .fp-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-4px) translateZ(0);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
 }
 
@@ -7266,6 +7342,8 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   margin-bottom: 18px;
   background: rgba(0, 0, 0, 0.015);
   border-radius: 4px;
+  contain: paint;
+  transform: translateZ(0);
 }
 
 .fp-card-image {
@@ -7274,17 +7352,21 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   object-fit: contain;
   mix-blend-mode: multiply;
   transition: transform 0.4s ease, filter 0.3s ease;
+  transform: translateZ(0);
 }
 
 .fp-card-image.blurred {
-  filter: blur(9px) brightness(0.92);
-  transform: scale(1.08);
+  filter: blur(8px) brightness(0.92);
+  transform: scale(1.06) translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
   pointer-events: none;
   user-select: none;
 }
 
 .fp-card:hover .fp-card-image:not(.blurred) {
-  transform: scale(1.04);
+  transform: scale(1.04) translateZ(0);
 }
 
 .fp-blur-overlay {
@@ -7294,15 +7376,15 @@ section[data-level="+06.00"][data-theme="white"] .datum .q {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(246, 242, 234, 0.48);
-  backdrop-filter: blur(2px);
+  background: rgba(246, 242, 234, 0.55);
   gap: 10px;
   z-index: 2;
   transition: background 0.3s ease;
+  pointer-events: none;
 }
 
 .fp-card:hover .fp-blur-overlay {
-  background: rgba(246, 242, 234, 0.35);
+  background: rgba(246, 242, 234, 0.42);
 }
 
 .fp-lock-icon-circle {

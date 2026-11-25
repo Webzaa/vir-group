@@ -8,6 +8,9 @@ const PROJECT_IMAGES = {
   'opportunity': '/media/projects/project-detail/opportunity.webp',
   'vir-paradise': '/media/projects/project-detail/paradise.png',
   'vir-vinayanand': '/media/projects/project-detail/vinayanand.png',
+  'vir-grace': '/media/projects/project-detail/under-construction.webp',
+  'vir-chandrapuri': '/media/projects/project-detail/under-construction.webp',
+  'vir-sanket': '/media/projects/project-detail/under-construction.webp',
   'vir-enclave': '/media/projects/project-detail/VIR-Enclave.png',
   'global-residency': '/media/projects/project-detail/globli-residency.png',
   'vir-krishna-koyna': '/media/projects/project-detail/Krishna-Koyana.png',
@@ -20,6 +23,9 @@ const PROJECT_STATUS_MAP = {
   'vir-paradise': 'ongoing',
   'surya-prakash': 'ongoing',
   'vir-vinayanand': 'upcoming',
+  'vir-grace': 'upcoming',
+  'vir-chandrapuri': 'upcoming',
+  'vir-sanket': 'upcoming',
   'opportunity': 'upcoming',
   'global-residency': 'completed',
   'vir-krishna-koyna': 'completed',
@@ -28,7 +34,10 @@ const PROJECT_STATUS_MAP = {
 // Project floor count mapping requested by user
 const PROJECT_FLOORS_MAP = {
   'vir-vinayanand': 7,
-  'vir-paradise': 23,
+  'vir-grace': 16,
+  'vir-chandrapuri': 14,
+  'vir-sanket': 15,
+  'vir-paradise': 22,
   'opportunity': 42,
   'vir-enclave': 17,
   'global-residency': 10,
@@ -39,8 +48,11 @@ const PROJECT_FLOORS_MAP = {
 // Default fallback projects matching directory brief
 const DEFAULT_PROJECTS = [
   { slug: 'opportunity', name: 'Opportunity', area: 'Malad East', status: 'upcoming', configurations: ['1', '2', '3'], elevation: { floors: 42, towerWidth: 230 } },
-  { slug: 'vir-paradise', name: 'VIR Paradise', area: 'Malad West', status: 'ongoing', configurations: ['1', '2', '3'], elevation: { floors: 23, towerWidth: 200 } },
+  { slug: 'vir-paradise', name: 'VIR Paradise', area: 'Malad West', status: 'ongoing', configurations: ['1', '2', '3'], elevation: { floors: 22, towerWidth: 200 } },
   { slug: 'vir-vinayanand', name: 'VIR Vinayanand', area: 'Santacruz', status: 'upcoming', configurations: [], elevation: { floors: 7, towerWidth: 190 } },
+  { slug: 'vir-grace', name: 'VIR Grace', area: 'Malad West', status: 'upcoming', configurations: [], elevation: { floors: 16, towerWidth: 210 } },
+  { slug: 'vir-chandrapuri', name: 'VIR Chandrapuri', area: 'Malad East', status: 'upcoming', configurations: [], elevation: { floors: 14, towerWidth: 200 } },
+  { slug: 'vir-sanket', name: 'VIR Sanket', area: 'Andheri East', status: 'upcoming', configurations: [], elevation: { floors: 15, towerWidth: 220 } },
   { slug: 'vir-enclave', name: 'VIR Enclave', area: 'Borivali West', status: 'completed', configurations: ['1', '2', '3'], elevation: { floors: 17, towerWidth: 270 } },
   { slug: 'global-residency', name: 'Global Residency', area: 'Goregaon East', status: 'completed', configurations: ['1', '2'], elevation: { floors: 10, towerWidth: 210 } },
   { slug: 'vir-krishna-koyna', name: 'VIR Krishna Koyna', area: 'Borivali West', status: 'completed', configurations: ['1', '2', '3'], elevation: { floors: 10, towerWidth: 300 } },
@@ -127,6 +139,13 @@ export function ProjectDirectory({ items = [] }) {
     return p.configurations.join(', ') + ' BHK';
   };
 
+  const formatFloors = (p) => {
+    if (p.slug === 'opportunity') return 'G+42 floors';
+    if (p.slug === 'vir-paradise') return 'G+21 floors';
+    if (p.slug === 'global-residency') return 'G+9 floors';
+    return `${p.floors} floors`;
+  };
+
   const handleHot = (p) => {
     if (!p || p.slug === activeSlug) return;
     setActiveSlug(p.slug);
@@ -171,11 +190,12 @@ export function ProjectDirectory({ items = [] }) {
     }
   }, []);
 
-  const gap = 1000 / allProjects.length;
+  const svgWidth = Math.max(1000, allProjects.length * 115);
+  const gap = svgWidth / allProjects.length;
 
   return (
     <>
-      {/* 1. FIRST SECTION: HERO SKYLINE WITH ALL 7 TOWERS PERSISTENTLY VISIBLE */}
+      {/* 1. FIRST SECTION: HERO SKYLINE WITH ALL TOWERS PERSISTENTLY VISIBLE */}
       <section ref={rootRef} className="proj-dir-wrap" id="dir" data-theme="basalt" data-hero="true" aria-label="Projects skyline directory">
       {/* Background image crossfade layers */}
       <i
@@ -201,10 +221,10 @@ export function ProjectDirectory({ items = [] }) {
         <span>Projects</span>
       </p>
 
-      {/* Interactive Skyline SVG - All 7 towers with clean spacing, 3D depth, and shadows */}
+      {/* Interactive Skyline SVG - All towers with clean spacing, 3D depth, and shadows */}
       <svg
         id="sky"
-        viewBox="0 0 1000 400"
+        viewBox={`0 0 ${svgWidth} 415`}
         role="group"
         aria-label="Skyline of VIR Group projects. Select a tower to open it."
       >
@@ -227,10 +247,8 @@ export function ProjectDirectory({ items = [] }) {
         </defs>
 
         {allProjects.map((p, i) => {
-          // Proportional width ensuring generous padding between adjacent towers
-          const rawW = p.towerWidth * 0.32;
-          const w = Math.min(88, Math.max(68, rawW));
-          // Height formula ensuring buildings stand noticeably taller and more grand
+          const rawW = p.towerWidth * 0.28;
+          const w = Math.min(74, Math.max(56, rawW));
           const h = 100 + (p.floors / 42) * 235;
           const floorStep = h / p.floors;
           const x = gap * i + gap / 2 - w / 2;
@@ -252,57 +270,35 @@ export function ProjectDirectory({ items = [] }) {
           }
 
           return (
-            <g
-              key={p.slug}
-              className={`tw ${isHot ? 'hot' : ''}`}
-              tabIndex={0}
-              role="button"
-              aria-label={`${p.name}, ${p.area}`}
-              onMouseEnter={() => handleHot(p)}
-              onFocus={() => handleHot(p)}
-              onClick={() => {
-                handleHot(p);
-                navigate(`/projects/${p.slug}`);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleHot(p);
-                  navigate(`/projects/${p.slug}`);
-                }
-              }}
+            <g key={p.slug} className={`tw ${isHot ? 'hot' : ''}`} tabIndex={0} role="button" aria-label={`${p.name}, ${p.area}`} onMouseEnter={() => handleHot(p)} onFocus={() => handleHot(p)} onClick={() => { handleHot(p); navigate(`/projects/${p.slug}`); }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleHot(p); navigate(`/projects/${p.slug}`); } }}
             >
-              {/* Full-column hit area ensuring the entire column, tower & text are reliably clickable */}
-              <rect
-                className="tw-hitbox"
-                x={gap * i}
-                y={0}
-                width={gap}
-                height={400}
-                fill="transparent"
-                style={{ pointerEvents: 'all', cursor: 'pointer' }}
-              />
-              {/* 3D Glass & Shadow Body */}
-              <rect
-                className="b"
-                x={x}
-                y={y}
-                width={w}
-                height={h}
-                rx="3"
-                filter={isHot ? 'url(#tw-glow)' : 'url(#tw-shadow)'}
-                fill={isHot ? 'url(#tw-hot-grad)' : 'url(#tw-glass-grad)'}
-              />
+              <rect className="tw-hitbox" x={gap * i} y={0} width={gap} height={415} fill="transparent" style={{ pointerEvents: 'all', cursor: 'pointer' }} />
+              <rect className="b" x={x} y={y} width={w} height={h} rx="3" filter={isHot ? 'url(#tw-glow)' : 'url(#tw-shadow)'} fill={isHot ? 'url(#tw-hot-grad)' : 'url(#tw-glass-grad)'} />
               {lines}
               <circle className="pin" cx={x + w / 2} cy={y - 14} r="3.5" />
               <circle className="pr" cx={x + w / 2} cy={y - 14} r="3.5" />
-              <text x={x + w / 2} y="382">
-                {p.name.replace('VIR ', '')}
-              </text>
+              {(() => {
+                const rawName = p.shortName || p.name.replace(/^Codename\s+/i, '').replace(/^VIR\s+/i, '').trim();
+                const parts = rawName.split(/\s+/);
+                const cx = x + w / 2;
+                if (parts.length > 1) {
+                  return (
+                    <text x={cx} y="377">
+                      <tspan x={cx} dy="0">{parts[0]}</tspan>
+                      <tspan x={cx} dy="13">{parts.slice(1).join(' ')}</tspan>
+                    </text>
+                  );
+                }
+                return (
+                  <text x={cx} y="384">
+                    {parts[0]}
+                  </text>
+                );
+              })()}
             </g>
           );
         })}
-        <line x1="0" x2="1000" y1="360" y2="360" stroke="rgba(241,237,229,.45)" strokeWidth="1.5" />
+        <line x1="0" x2={svgWidth} y1="360" y2="360" stroke="rgba(241,237,229,.45)" strokeWidth="1.5" />
       </svg>
 
       {/* Active Project Card */}
@@ -312,9 +308,17 @@ export function ProjectDirectory({ items = [] }) {
             {activeProject.area} · {STATUS_TEXT[activeProject.status] || activeProject.status}
           </span>
           <h3>{activeProject.name}</h3>
-          <span className="mi" style={{ color: 'var(--mute)' }}>
-            {formatConfig(activeProject)} · {activeProject.slug === 'opportunity' ? 'G+42 floors' : `${activeProject.floors} floors`}
-          </span>
+          {/* BHK and floor display commented out for upcoming projects as requested */}
+          {/* {!['vir-grace', 'vir-chandrapuri', 'vir-sanket'].includes(activeProject.slug) && (
+            <span className="mi" style={{ color: 'var(--mute)' }}>
+              {formatConfig(activeProject)} · {formatFloors(activeProject)}
+            </span>
+          )} */}
+          {!['vir-grace', 'vir-chandrapuri', 'vir-sanket'].includes(activeProject.slug) && (
+            <span className="mi" style={{ color: 'var(--mute)' }}>
+              {formatConfig(activeProject)} · {formatFloors(activeProject)}
+            </span>
+          )}
         </div>
         <Link to={`/projects/${activeProject.slug}`} className="go mi">
           Enter project →
@@ -370,15 +374,8 @@ export function ProjectDirectory({ items = [] }) {
                     handleListMouseMove(e);
                   }}
                   onMouseLeave={() => setHoverProject(null)}
-                  onFocus={() => {
-                    handleHot(p);
-                    setHoverProject(p);
-                    setPreviewProject(p);
-                  }}
-                  onClick={() => {
-                    handleHot(p);
-                    navigate(`/projects/${p.slug}`);
-                  }}
+                  onFocus={() => { handleHot(p); setHoverProject(p); setPreviewProject(p); }}
+                  onClick={() => { handleHot(p); navigate(`/projects/${p.slug}`); }}
                 >
                   <span className="n mi">{String(i + 1).padStart(2, '0')}</span>
                   <div className="proj-row-content">

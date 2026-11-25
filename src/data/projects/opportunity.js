@@ -9,6 +9,7 @@ export const opportunity = {
   statement: ['An address crafted', 'beyond expectations.'],
   configurations: ['1', '2', '3'],
   carpetArea: '1199999 sq.ft',
+  brochureUrl: '/brochures/opportunity-brochure.pdf',
   hero: {
     src: '/media/projects/project-detail/opportunity.webp',
     alt: 'Codename Opportunity, Malad East, Mumbai',

@@ -10,6 +10,7 @@ export const virVinayanand = {
   area: 'Santacruz',
   city: 'Mumbai',
   status: 'ongoing',
+  brochureUrl: '/brochures/vir-vinayanand-brochure.pdf',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.4240386995816!2d72.85552267425444!3d19.1766729488062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b7b834ff28e9%3A0x9f6fd34672620c06!2sVIR%20GROUP!5e0!3m2!1sen!2sin!4v1791272610508!5m2!1sen!2sin',
   configurations: ['1', '2', '3'],
@@ -32,6 +33,7 @@ export const virEnclave = {
   area: 'Borivali West',
   city: 'Mumbai',
   status: 'completed',
+  brochureUrl: '/brochures/vir-enclave-brochure.pdf',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.338218739854!2d72.8423567742557!3d19.224086147308817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b1000a3e6001%3A0xd294fd9cb1c0caa9!2sVir%20Enclave%20By%20Vir%20Group!5e0!3m2!1sen!2sin!4v1791272691392!5m2!1sen!2sin',
   configurations: ['1', '2', '3'],
@@ -81,6 +83,7 @@ export const globalResidency = {
   area: 'Goregaon',
   city: 'Mumbai',
   status: 'available',
+  brochureUrl: '/brochures/global-residency-brochure.pdf',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.693298248183!2d72.85397557425415!3d19.164898049177516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b70ce63ba081%3A0x2df6efe0a4fc009d!2sGlobal%20Residency!5e0!3m2!1sen!2sin!4v1791272930134!5m2!1sen!2sin',
   configurations: ['1', '2'],
@@ -125,9 +128,10 @@ export const virKrishnaKoyna = {
   slug: 'vir-krishna-koyna',
   legacySlugs: ['krishnakoyna'],
   name: 'VIR Krishna Koyna',
-  area: 'Mankhurd',
+  area: 'Borivali West',
   city: 'Mumbai',
   status: 'available',
+  brochureUrl: '/brochures/vir-krishna-koyna-brochure.pdf',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.342674857535!2d72.8425981242556!3d19.223891797314913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b1058b457809%3A0x1b55d3616bdc6da3!2sKrishna%20Koyna!5e0!3m2!1sen!2sin!4v1791272762385!5m2!1sen!2sin',
   configurations: ['1', '2', '3'],
@@ -137,20 +141,20 @@ export const virKrishnaKoyna = {
   tagline: 'ADD DIVINITY TO YOUR LIFESTYLE',
   statement: ['Add divinity to', 'your lifestyle.'],
   description:
-    'VIR Krishna Koyna is a thoughtfully planned residential project located in Mankhurd, Mumbai, offering well-designed homes that blend comfort, functionality, and urban convenience. The project is spread across 0.22 acres, ensuring a well-organized and efficient residential layout.',
+    'VIR Krishna Koyna is a thoughtfully planned residential project located in Borivali West, Mumbai, offering well-designed homes that blend comfort, functionality, and urban convenience. The project is spread across 0.22 acres, ensuring a well-organized and efficient residential layout.',
   aboutParagraphs: [
-    'VIR Krishna Koyna is a thoughtfully planned residential project located in Mankhurd, Mumbai, offering well-designed homes that blend comfort, functionality, and urban convenience. The project is spread across 0.22 acres, ensuring a well-organized and efficient residential layout.',
+    'VIR Krishna Koyna is a thoughtfully planned residential project located in Borivali West, Mumbai, offering well-designed homes that blend comfort, functionality, and urban convenience. The project is spread across 0.22 acres, ensuring a well-organized and efficient residential layout.',
     'VIR Krishna Koyna offers premium apartment configurations, including 1 BHK, 2 BHK, and 3 BHK residences, designed to cater to the diverse needs of modern families. As per the approved area plan, apartment sizes start from 369 sq. ft., providing optimal space utilization and comfortable living.',
     'The project is currently under construction and comprises one residential building with a total of 16 exclusive units, ensuring privacy and a close-knit community environment. The development is equipped with fire protection and fire safety systems in compliance with statutory norms and includes closed car parking facilities for residents.',
     'VIR Krishna Koyna promises a class-apart lifestyle, combining quality construction with essential modern amenities. The project has received bank finance approvals from leading institutions, including HDFC, LIC Housing Finance, and Punjab National Bank, making home ownership easier and more accessible.',
     'The project complies with all regulations mandated by the state authority and is RERA registered under RERA ID: P51800027749, ensuring transparency and trust.',
-    'Strategically located in Mankhurd, the project enjoys excellent connectivity to key business hubs, educational institutions, healthcare facilities, and recreational destinations, making it an ideal choice for urban living.',
+    'Strategically located in Borivali West, the project enjoys excellent connectivity to key business hubs, educational institutions, healthcare facilities, and recreational destinations, making it an ideal choice for urban living.',
   ],
   elevation: { floors: 10, towerWidth: 300, columns: 9 },
   cutout: '/media/home-project/krishna-koyna-image-.avif',
   hero: {
     src: '/media/projects/project-detail/Krishna-Koyana.png',
-    alt: 'VIR Krishna Koyna, Mankhurd',
+    alt: 'VIR Krishna Koyna, Borivali West',
     artisticImpression: true,
   },
   amenities: {
@@ -168,7 +172,7 @@ export const virKrishnaKoyna = {
     ],
   },
   disclaimer: 'Important: All details are subject to change. Please verify with our sales team before making decisions.',
-  seo: seo('VIR Krishna Koyna', 'Mankhurd', '1, 2 and 3 BHK'),
+  seo: seo('VIR Krishna Koyna', 'Borivali West', '1, 2 and 3 BHK'),
 };
 
 export const suryaPrakash = {
@@ -178,6 +182,7 @@ export const suryaPrakash = {
   area: 'Vile Parle',
   city: 'Mumbai',
   status: 'ongoing',
+  brochureUrl: '/brochures/surya-prakash-brochure.pdf',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.3625348452906!2d72.84136137425216!3d19.091745251479907!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9ae40c4ab9b%3A0x3a0f948dc777e56e!2sSurya%20Prakash%20CHS%20Ltd!5e0!3m2!1sen!2sin!4v1791272972377!5m2!1sen!2sin',
   configurations: ['1', '2', '3'],
@@ -218,4 +223,124 @@ export const suryaPrakash = {
   },
   disclaimer: 'Important: All details are subject to change. Please verify with our sales team before making decisions.',
   seo: seo('Surya Prakash', 'Vile Parle', '1, 2 and 3 BHK'),
+};
+
+export const virGrace = {
+  slug: 'vir-grace',
+  legacySlugs: ['virgrace'],
+  name: 'VIR Grace',
+  area: 'Malad West',
+  city: 'Mumbai',
+  status: 'upcoming',
+  brochureUrl: '/brochures/vir-grace-brochure.pdf',
+  mapEmbed:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.4240386995816!2d72.83552267425444!3d19.1866729488062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b6e3f5d54a29%3A0x8f8c4e0f49c06122!2sMalad%20West%2C%20Mumbai!5e0!3m2!1sen!2sin!4v1791272610508!5m2!1sen!2sin',
+  /* BHK and floor configurations commented out for upcoming projects */
+  // configurations: ['1', '2', '3'],
+  configurations: [],
+  elevation: { floors: 16, towerWidth: 210, columns: 6, crown: true },
+  hero: {
+    src: '/media/projects/project-detail/under-construction.webp',
+    alt: 'VIR Grace, Malad West',
+    artisticImpression: true,
+  },
+  tagline: 'Under Construction · Coming Soon to Malad West',
+  statement: ['Modern elegance,', 'thoughtful design.'],
+  description: 'Coming Soon! Premium residential development in Malad West, Mumbai by VIR Group.',
+  aboutParagraphs: ['Coming Soon!'],
+  amenities: {
+    verified: true,
+    items: [
+      'Parking',
+      '24/7 Security',
+      'Kids Play Area',
+      'Elevator',
+      '24x7 Water Supply',
+      'Power Backup',
+      'CCTV Surveillance',
+      'Rainwater Harvesting',
+    ],
+  },
+  disclaimer: 'Important: All details are subject to change. Please verify with our sales team before making decisions.',
+  seo: seo('VIR Grace', 'Malad West'),
+};
+
+export const virChandrapuri = {
+  slug: 'vir-chandrapuri',
+  legacySlugs: ['virchandrapuri'],
+  name: 'VIR Chandrapuri',
+  area: 'Malad East',
+  city: 'Mumbai',
+  status: 'upcoming',
+  brochureUrl: '/brochures/vir-chandrapuri-brochure.pdf',
+  mapEmbed:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.4240386995816!2d72.85552267425444!3d19.1866729488062!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b70ce63ba081%3A0x2df6efe0a4fc009d!2sMalad%20East%2C%20Mumbai!5e0!3m2!1sen!2sin!4v1791272930134!5m2!1sen!2sin',
+  /* BHK and floor configurations commented out for upcoming projects */
+  // configurations: ['1', '2', '3'],
+  configurations: [],
+  elevation: { floors: 14, towerWidth: 200, columns: 5, crown: true },
+  hero: {
+    src: '/media/projects/project-detail/under-construction.webp',
+    alt: 'VIR Chandrapuri, Malad East',
+    artisticImpression: true,
+  },
+  tagline: 'Under Construction · Coming Soon to Malad East',
+  statement: ['Serene living,', 'connected address.'],
+  description: 'Coming Soon! Premium residential development in Malad East, Mumbai by VIR Group.',
+  aboutParagraphs: ['Coming Soon!'],
+  amenities: {
+    verified: true,
+    items: [
+      'Parking',
+      '24/7 Security',
+      'Kids Play Area',
+      'Garden/Park',
+      'Elevator',
+      '24x7 Water Supply',
+      'Power Backup',
+      'CCTV Surveillance',
+    ],
+  },
+  disclaimer: 'Important: All details are subject to change. Please verify with our sales team before making decisions.',
+  seo: seo('VIR Chandrapuri', 'Malad East'),
+};
+
+export const virSanket = {
+  slug: 'vir-sanket',
+  legacySlugs: ['virsanket'],
+  name: 'VIR Sanket',
+  area: 'Andheri East',
+  city: 'Mumbai',
+  status: 'upcoming',
+  brochureUrl: '/brochures/vir-sanket-brochure.pdf',
+  mapEmbed:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.5891361287954!2d72.86877997425318!3d19.11728285040333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c83c27e02df3%3A0xa64506b3a0e63f5d!2sAndheri%20East%2C%20Mumbai!5e0!3m2!1sen!2sin!4v1791272972377!5m2!1sen!2sin',
+  /* BHK and floor configurations commented out for upcoming projects */
+  // configurations: ['1', '2', '3'],
+  configurations: [],
+  elevation: { floors: 15, towerWidth: 220, columns: 6, crown: true },
+  hero: {
+    src: '/media/projects/project-detail/under-construction.webp',
+    alt: 'VIR Sanket, Andheri East',
+    artisticImpression: true,
+  },
+  tagline: 'Under Construction · Coming Soon to Andheri East',
+  statement: ['Prime connectivity,', 'contemporary lifestyle.'],
+  description: 'Coming Soon! Premium residential development in Andheri East, Mumbai by VIR Group.',
+  aboutParagraphs: ['Coming Soon!'],
+  amenities: {
+    verified: true,
+    items: [
+      'Parking',
+      '24/7 Security',
+      'Kids Play Area',
+      'Elevator',
+      '24x7 Water Supply',
+      'Power Backup',
+      'CCTV Surveillance',
+      'Fire Fighting System',
+    ],
+  },
+  disclaimer: 'Important: All details are subject to change. Please verify with our sales team before making decisions.',
+  seo: seo('VIR Sanket', 'Andheri East'),
 };

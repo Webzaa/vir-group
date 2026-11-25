@@ -1,31 +1,113 @@
-import { useState, useId, useRef } from 'react';
+import { useState, useId, useRef, useEffect, useCallback, useMemo } from 'react';
 import { testimonialsData } from '@/data/testimonials';
 import { getMediaUrl } from '@/lib/media';
 
-export function Testimonial({ items = testimonialsData, level = '+09.00' }) {
+export function Testimonial({ items = testimonialsData, level = '+09.00', autoPlayInterval = 4500 }) {
   const totalItems = items.length;
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const CLONES_COUNT = 3;
+
+  // Clone 3 items at start and end for seamless infinite looping without empty space or rewind jumps
+  const slides = useMemo(() => {
+    if (totalItems <= 1) return items;
+    return [
+      ...items.slice(-CLONES_COUNT),
+      ...items,
+      ...items.slice(0, CLONES_COUNT),
+    ];
+  }, [items, totalItems]);
+
+  const [pos, setPos] = useState(CLONES_COUNT); // Starts at real index 0 (Slide 1)
+  const [withTransition, setWithTransition] = useState(true);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const isTransitioningRef = useRef(false);
+  const resetTimerRef = useRef(null);
   const startXRef = useRef(0);
   const currentXRef = useRef(0);
+  const trackRef = useRef(null);
   const sectionId = useId();
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalItems - 1));
+  // Active display index (0-based: 0 to totalItems - 1)
+  const activeIndex = totalItems > 0 ? ((pos - CLONES_COUNT) % totalItems + totalItems) % totalItems : 0;
+
+  const handleNext = useCallback(() => {
+    if (isTransitioningRef.current) return;
+    isTransitioningRef.current = true;
+    setWithTransition(true);
+    setPos((prev) => prev + 1);
+
+    clearTimeout(resetTimerRef.current);
+    resetTimerRef.current = setTimeout(() => {
+      isTransitioningRef.current = false;
+    }, 550);
+  }, []);
+
+  const handlePrev = useCallback(() => {
+    if (isTransitioningRef.current) return;
+    isTransitioningRef.current = true;
+    setWithTransition(true);
+    setPos((prev) => prev - 1);
+
+    clearTimeout(resetTimerRef.current);
+    resetTimerRef.current = setTimeout(() => {
+      isTransitioningRef.current = false;
+    }, 550);
+  }, []);
+
+  const goToIndex = (targetIdx) => {
+    if (isTransitioningRef.current) return;
+    setWithTransition(true);
+    setPos(targetIdx + CLONES_COUNT);
   };
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev < totalItems - 1 ? prev + 1 : 0));
+  // Seamless jump when transitioning into clones
+  const handleTransitionEnd = (e) => {
+    if (e && e.target !== trackRef.current) return;
+
+    if (pos >= CLONES_COUNT + totalItems) {
+      setWithTransition(false);
+      setPos(pos - totalItems);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setWithTransition(true);
+          isTransitioningRef.current = false;
+        });
+      });
+    } else if (pos < CLONES_COUNT) {
+      setWithTransition(false);
+      setPos(pos + totalItems);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setWithTransition(true);
+          isTransitioningRef.current = false;
+        });
+      });
+    } else {
+      isTransitioningRef.current = false;
+    }
   };
 
-  const goToIndex = (idx) => {
-    setCurrentIndex(Math.max(0, Math.min(idx, totalItems - 1)));
-  };
+  // Auto-play infinite loop (pauses on hover and while dragging)
+  useEffect(() => {
+    if (isHovered || isDragging || totalItems <= 1) return;
+
+    const timer = setInterval(() => {
+      if (typeof document !== 'undefined' && document.hidden) return;
+      handleNext();
+    }, autoPlayInterval);
+
+    return () => clearInterval(timer);
+  }, [isHovered, isDragging, totalItems, autoPlayInterval, handleNext, pos]);
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => clearTimeout(resetTimerRef.current);
+  }, []);
 
   /* Pointer / Touch Drag Gestures for Swiper */
   const handlePointerDown = (e) => {
-    // Only primary mouse button or touch
     if (e.button !== undefined && e.button !== 0) return;
     setIsDragging(true);
     startXRef.current = e.clientX;
@@ -37,25 +119,18 @@ export function Testimonial({ items = testimonialsData, level = '+09.00' }) {
     if (!isDragging) return;
     currentXRef.current = e.clientX;
     const diff = currentXRef.current - startXRef.current;
-    // Dampen drag at boundaries
-    if ((currentIndex === 0 && diff > 0) || (currentIndex === totalItems - 1 && diff < 0)) {
-      setDragOffset(diff * 0.35);
-    } else {
-      setDragOffset(diff);
-    }
+    setDragOffset(diff);
   };
 
   const handlePointerUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
     const diff = currentXRef.current - startXRef.current;
-    const threshold = 45; // responsive swipe threshold
+    const threshold = 45;
 
     if (diff < -threshold) {
-      // Swiped Left -> Advance 1 item to next
       handleNext();
     } else if (diff > threshold) {
-      // Swiped Right -> Go 1 item to prev
       handlePrev();
     }
     setDragOffset(0);
@@ -68,6 +143,8 @@ export function Testimonial({ items = testimonialsData, level = '+09.00' }) {
       data-level={level}
       data-theme="lime"
       aria-labelledby={`${sectionId}-heading`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* ----------------------------------------------------------------------
           BACKGROUND AMBIANCE & OVERLAY
@@ -99,26 +176,39 @@ export function Testimonial({ items = testimonialsData, level = '+09.00' }) {
         </header>
 
         {/* --------------------------------------------------------------------
-            SWIPER SLIDER CAROUSEL TRACK (1-by-1 Smooth Fast Slide)
+            SWIPER SLIDER CAROUSEL TRACK (Seamless Infinite Loop)
             -------------------------------------------------------------------- */}
-        <div className={`testimonials-swiper-container ${isDragging ? 'is-dragging' : ''}`}
+        <div
+          className={`testimonials-swiper-container ${isDragging ? 'is-dragging' : ''}`}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
           role="region"
-          aria-label="Client testimonials slider">
-          <div className="testimonials-swiper-track"
+          aria-label="Client testimonials slider"
+        >
+          <div
+            ref={trackRef}
+            className="testimonials-swiper-track"
             style={{
-              transform: `translateX(calc(-${currentIndex} * var(--testimonials-shift) + ${dragOffset}px))`,
-              transition: isDragging ? 'none' : 'transform 0.38s cubic-bezier(0.22, 1, 0.36, 1)',
+              transform: `translateX(calc(-${pos} * var(--testimonials-shift) + ${dragOffset}px))`,
+              transition:
+                withTransition && !isDragging
+                  ? 'transform 0.42s cubic-bezier(0.22, 1, 0.36, 1)'
+                  : 'none',
             }}
+            onTransitionEnd={handleTransitionEnd}
           >
-            {items.map((item, idx) => (
-              <div key={item.id} className={`testimonials-swiper-slide ${currentIndex === idx ? 'is-active' : ''}`} >
+            {slides.map((item, idx) => (
+              <div
+                key={`${item.id}-${idx}`}
+                className={`testimonials-swiper-slide ${pos === idx ? 'is-active' : ''}`}
+              >
                 <article className="testimonial-card">
-                  <div className={`testimonial-quote-glyph ${item.quoteVariant === 'muted' || idx % 2 === 1 ? 'is-muted' : 'is-primary'}`} aria-hidden="true">
-
+                  <div
+                    className={`testimonial-quote-glyph ${item.quoteVariant === 'muted' || idx % 2 === 1 ? 'is-muted' : 'is-primary'}`}
+                    aria-hidden="true"
+                  >
                     <svg
                       width="86"
                       height="110"
@@ -129,12 +219,17 @@ export function Testimonial({ items = testimonialsData, level = '+09.00' }) {
                     >
                       <path d="M31 5H42L35 34H45V61H15V38L31 5Z" fill="#0c1049ff" />
                     </svg>
-
                   </div>
                   <div className="testimonial-body">
                     <div className="testimonial-stars" aria-label="5 out of 5 stars">
                       {[...Array(5)].map((_, starIdx) => (
-                        <svg key={starIdx} viewBox="0 0 24 24" fill="currentColor" className="testimonial-star" aria-hidden="true" >
+                        <svg
+                          key={starIdx}
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="testimonial-star"
+                          aria-hidden="true"
+                        >
                           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                         </svg>
                       ))}
@@ -152,14 +247,27 @@ export function Testimonial({ items = testimonialsData, level = '+09.00' }) {
 
                       <div className="testimonial-meta-details">
                         <p className="testimonial-location">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="testimonial-pin-icon" aria-hidden="true">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="testimonial-pin-icon"
+                            aria-hidden="true"
+                          >
                             <path d="M12 21s-6-5.6-6-10a6 6 0 1 1 12 0c0 4.4-6 10-6 10z" />
                             <circle cx="12" cy="11" r="2.5" />
                           </svg>
                           <span>{item.location}</span>
                         </p>
                         {item.project && (
-                          <p className="testimonial-project"><span>Project: <b>{item.project}</b></span></p>
+                          <p className="testimonial-project">
+                            <span>
+                              Project: <b>{item.project}</b>
+                            </span>
+                          </p>
                         )}
                       </div>
                     </footer>
@@ -199,14 +307,14 @@ export function Testimonial({ items = testimonialsData, level = '+09.00' }) {
 
           {/* Current Index Number (1-based) */}
           <span className="testimonials-nav-num testimonials-nav-current">
-            {currentIndex + 1}
+            {activeIndex + 1}
           </span>
 
           {/* Central Progress Track Line */}
           <div
             className="testimonials-progress-track"
             role="progressbar"
-            aria-valuenow={currentIndex + 1}
+            aria-valuenow={activeIndex + 1}
             aria-valuemin="1"
             aria-valuemax={totalItems}
             onClick={(e) => {
@@ -222,7 +330,7 @@ export function Testimonial({ items = testimonialsData, level = '+09.00' }) {
               className="testimonials-progress-fill"
               style={{
                 width: `${100 / totalItems}%`,
-                transform: `translateX(${currentIndex * 100}%)`,
+                transform: `translateX(${activeIndex * 100}%)`,
               }}
             />
           </div>

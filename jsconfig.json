@@ -6,7 +6,12 @@
     "jsx": "react-jsx",
     "checkJs": false,
     "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"] }
+    "paths": {
+      "@/*": ["./src/*"],
+      "@AllSection/*": ["./src/All Section/*"],
+      "@media/*": ["./public/media/*"],
+      "@public/*": ["./public/*"]
+    }
   },
   "include": ["src", "server", "scripts", "vite.config.js"]
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 
-export function PopupDetail({ project, delay = 3500, onAction }) {
+export function PopupDetail({ project, delay = 10000, onAction }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 

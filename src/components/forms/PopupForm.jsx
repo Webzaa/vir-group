@@ -88,7 +88,7 @@ export function PopupForm({
   const modalPanelRef = useRef(null);
   const startedRef = useRef(false);
 
-  // iso se track karte hain, kyunki kai countries ka dial code same hota hai (+1 etc.)
+  // Track by ISO code since multiple countries share the same calling code (+1, etc.)
   const [countryIso, setCountryIso] = useState(DEFAULT_ISO);
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [errors, setErrors] = useState({});
@@ -188,7 +188,7 @@ export function PopupForm({
     const projectName = String(defaultProject || 'General Enquiry').trim();
     const thankYouUrl = `/thank-you?name=${encodeURIComponent(name)}&project=${encodeURIComponent(projectName)}&type=lead`;
 
-    // 2. Honeypot: bot ne hidden field bhara. Fake success.
+    // 2. Honeypot check: bot filled hidden field. Fake success.
     if (honeypot) {
       onClose?.();
       navigate(thankYouUrl);
@@ -218,7 +218,7 @@ export function PopupForm({
       try {
         result = await response.json();
       } catch {
-        throw new Error('Server ne invalid response diya. Please try again.');
+        throw new Error('Server returned an invalid response. Please try again.');
       }
 
       if (Number(result.status) !== 1) {
@@ -319,7 +319,7 @@ export function PopupForm({
 
           <div className={`popup-consent-wrap ${errors.consent ? 'has-error' : ''}`}>
             <label className="popup-consent-label">
-              {/* defaultChecked hata diya: user ko khud tick karna hoga */}
+              {/* Consent checkbox: user must explicitly opt in */}
               <input
                 type="checkbox"
                 name="consent"

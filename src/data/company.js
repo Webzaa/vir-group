@@ -9,9 +9,9 @@ export const company = {
   message:
     'From its roots in Malad, every VIR project, including its landmark VIR Paradise, reflects a commitment to quality and an understanding of what makes a house a home. The customer-centric approach Veerabhai Prajapati set from day one remains the foundation of the group.',
   story: [
-    'Founded in 2013, VIR Group set out to create quality homes in Malad. That vision has grown into a legacy of trust, craftsmanship and innovation across Mumbai.',
+    'Founded in 2013, VIR Group set out to create quality in Mumbai. That vision has grown into a legacy of trust, craftsmanship and innovation across Mumbai.',
     'Over more than a decade the group has built more than structures: communities where families settle, grow and stay.',
-    'Today VIR Group operates through Global Housing Ventures, Parth Life Space, Digicon Developers and JKD Engineering and Infrastructure.',
+    'Today VIR Group operates through Global Housing Ventures, Parth Life Space, Digicon Developers and JKD Engineer and Infrastructure Pvt Ltd.',
   ],
   vision: ['To be Mumbai’s most', 'trusted real estate partner.'],
   visionText: 'A future where every family finds its home, every community thrives, and every structure stands for quality and timeless design.',
@@ -65,7 +65,7 @@ export const values = [
 ];
 export const groupCompanies = [
   { name: 'Global Housing Ventures', category: 'Real estate development' },
-  { name: 'JKD Engineering and Infrastructure Pvt Ltd', category: 'Real estate development' },
+  { name: 'JKD Engineer and Infrastructure Pvt Ltd', category: 'Real estate development' },
   { name: 'Parth Life Space', category: 'Real estate development' },
   { name: 'Viriconic developers pvt ltd', category: 'Real estate development' },
   { name: 'Viru Gems', category: 'Luxury gems and jewellery', needsReview: true },

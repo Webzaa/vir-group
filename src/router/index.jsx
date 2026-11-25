@@ -34,8 +34,8 @@ import {
 } from './loaders';
 
 const getBasename = () => {
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/vir-groupv7')) {
-    return '/vir-groupv7';
+  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/vir-groupv10')) {
+    return '/vir-groupv10';
   }
   return '/';
 };
@@ -164,7 +164,7 @@ export const router = createBrowserRouter(
               loader: homeLoader,
             },
             {
-              path: 'vir-groupv7',
+              path: 'vir-groupv10',
               element: <HomePage />,
               loader: homeLoader,
             },

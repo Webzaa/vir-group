@@ -9,6 +9,7 @@ export const virParadise = {
   configurations: ['1', '2', '3'],
   rera: 'P51800079526',
   carpetArea: '172999 sq.ft',
+  brochureUrl: '/brochures/vir-paradise-brochure.pdf',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.2420076269514!2d72.84492517425461!3d19.184629348555127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b700157ea951%3A0xbfd8cf3b5dec10eb!2sVIR%20Paradise!5e0!3m2!1sen!2sin!4v1791272806458!5m2!1sen!2sin',
   cutout: '/media/home-project/vir-paradise-image--1765981006207-4894.avif',
@@ -40,7 +41,7 @@ export const virParadise = {
       'Elevator',
     ],
   },
-  elevation: { floors: 23, towerWidth: 200, columns: 6, crown: true },
+  elevation: { floors: 22, towerWidth: 200, columns: 6, crown: true },
   featured: true,
   disclaimer: 'Important: All details are subject to change. Please verify with our sales team before making decisions.',
   seo: {

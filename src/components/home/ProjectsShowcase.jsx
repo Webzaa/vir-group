@@ -25,12 +25,24 @@ const HOME_TOWER_CUTOUTS = {
   'vir-krishna-koyna': '/media/home-project/krishna-koyna.png',
   'surya-prakash': '/media/home-project/suryaprakash.png',
 };
-export function ProjectsShowcase({ items }) {
+export function ProjectsShowcase({ items = [] }) {
   const navigate = useNavigate();
   const root = useRef(null);
   const skylineRef = useRef(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const skylineTowers = items;
+
+  // Exactly 7 iconic landmark towers with bespoke cutouts
+  const SIGNATURE_7_SLUGS = [
+    'opportunity',
+    'vir-paradise',
+    'vir-vinayanand',
+    'vir-enclave',
+    'global-residency',
+    'vir-krishna-koyna',
+    'surya-prakash',
+  ];
+  const matchedTowers = items.filter((p) => SIGNATURE_7_SLUGS.includes(p.slug));
+  const skylineTowers = matchedTowers.length === 7 ? matchedTowers : items.slice(0, 7);
   const activeTower = skylineTowers[activeIdx] || skylineTowers[0];
 
   // Touch and drag tracking to prevent accidental navigation on mobile scroll
@@ -51,7 +63,18 @@ export function ProjectsShowcase({ items }) {
     }, 500);
   };
 
+  const isControlTarget = (target) => {
+    return !!(
+      target?.closest?.('button') ||
+      target?.closest?.('.pj-mobile-nav') ||
+      target?.closest?.('.pj-nav-btn') ||
+      target?.closest?.('.pj-mobile-dot') ||
+      target?.closest?.('.pj-bottom-link')
+    );
+  };
+
   const handleTouchStart = (e) => {
+    if (isControlTarget(e.target)) return;
     if (!e.touches || e.touches.length === 0) return;
     const touch = e.touches[0];
     touchStartRef.current = {
@@ -66,19 +89,21 @@ export function ProjectsShowcase({ items }) {
   };
 
   const handleTouchMove = (e) => {
+    if (isControlTarget(e.target)) return;
     if (!e.touches || e.touches.length === 0) return;
     const touch = e.touches[0];
     const dx = Math.abs(touch.clientX - touchStartRef.current.x);
     const dy = Math.abs(touch.clientY - touchStartRef.current.y);
-    // If movement exceeds 3px, it is a scroll or swipe gesture, not a stationary tap
-    if (dx > 3 || dy > 3) {
+    // If movement exceeds 10px, it is a scroll or swipe gesture, not a stationary tap
+    if (dx > 10 || dy > 10) {
       isDraggingRef.current = true;
       preventClickRef.current = true;
       lastScrollTimeRef.current = Date.now();
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e) => {
+    if (isControlTarget(e?.target)) return;
     if (isDraggingRef.current) {
       preventClickRef.current = true;
       clearTimeout(preventClickTimeoutRef.current);
@@ -98,6 +123,10 @@ export function ProjectsShowcase({ items }) {
   };
 
   const handleClickCapture = (e) => {
+    // Never block intentional clicks on mobile navigation arrows, dots, or buttons
+    if (isControlTarget(e.target)) {
+      return;
+    }
     if (isScrollOrDrag()) {
       e.preventDefault();
       e.stopPropagation();
@@ -138,22 +167,38 @@ export function ProjectsShowcase({ items }) {
     return () => window.removeEventListener('vir-towers-progress', handleProgress);
   }, [skylineTowers.length]);
 
+  const scrollDebounceRef = useRef(null);
+  const isNavigatingRef = useRef(false);
+
   const handleTrackScroll = (e) => {
     markScrollingOrDragging();
     if (typeof window === 'undefined' || window.innerWidth >= 900) return;
+    if (isNavigatingRef.current) return;
     const el = e.currentTarget;
-    if (!el.clientWidth) return;
-    const newIdx = Math.min(Math.max(0, Math.round(el.scrollLeft / el.clientWidth)), skylineTowers.length - 1);
-    if (newIdx !== activeIdx) {
-      setActiveIdx(newIdx);
-    }
+    if (!el || !el.clientWidth) return;
+
+    clearTimeout(scrollDebounceRef.current);
+    scrollDebounceRef.current = setTimeout(() => {
+      if (!el.clientWidth) return;
+      const newIdx = Math.min(
+        Math.max(0, Math.round(el.scrollLeft / el.clientWidth)),
+        skylineTowers.length - 1
+      );
+      setActiveIdx((prev) => (prev !== newIdx ? newIdx : prev));
+    }, 60);
   };
   const scrollToTower = (index) => {
     const el = skylineRef.current;
     if (!el) return;
-    const targetX = index * el.clientWidth;
-    el.scrollTo({ left: targetX, behavior: 'smooth' });
+    isNavigatingRef.current = true;
+    clearTimeout(scrollDebounceRef.current);
     setActiveIdx(index);
+    const targetChild = el.children && el.children[index];
+    const targetX = targetChild ? targetChild.offsetLeft : index * el.clientWidth;
+    el.scrollTo({ left: targetX, behavior: 'smooth' });
+    setTimeout(() => {
+      isNavigatingRef.current = false;
+    }, 450);
   };
   useGSAP(
     () => {
@@ -275,7 +320,7 @@ export function ProjectsShowcase({ items }) {
         <div className="pj-bg-overlay" />
       </div>
 
-      {/* Cinematic Parting Clouds Curtain (Badal reveal: slides left & right on scroll) */}
+      {/* Cinematic Parting Clouds Curtain (Cloud reveal: slides left & right on scroll) */}
       <div className="pj-parting-clouds-curtain" aria-hidden="true">
         <div className="pj-parting-cloud-mist" />
         <div className="pj-parting-cloud-side pj-parting-cloud-left">
@@ -440,7 +485,12 @@ export function ProjectsShowcase({ items }) {
         <button
           type="button"
           className="pj-nav-btn pj-nav-prev"
-          onClick={() => scrollToTower((activeIdx - 1 + skylineTowers.length) % skylineTowers.length)}
+          onClick={(e) => {
+            e.stopPropagation();
+            const el = skylineRef.current;
+            const current = el && el.clientWidth ? Math.round(el.scrollLeft / el.clientWidth) : activeIdx;
+            scrollToTower((current - 1 + skylineTowers.length) % skylineTowers.length);
+          }}
           aria-label="Previous building"
         >
           ←
@@ -452,7 +502,10 @@ export function ProjectsShowcase({ items }) {
               key={i}
               type="button"
               className={`pj-mobile-dot ${i === activeIdx ? 'is-active' : ''}`}
-              onClick={() => scrollToTower(i)}
+              onClick={(e) => {
+                e.stopPropagation();
+                scrollToTower(i);
+              }}
               aria-label={`View building ${i + 1}`}
             />
           ))}
@@ -461,14 +514,19 @@ export function ProjectsShowcase({ items }) {
         <button
           type="button"
           className="pj-nav-btn pj-nav-next"
-          onClick={() => scrollToTower((activeIdx + 1) % skylineTowers.length)}
+          onClick={(e) => {
+            e.stopPropagation();
+            const el = skylineRef.current;
+            const current = el && el.clientWidth ? Math.round(el.scrollLeft / el.clientWidth) : activeIdx;
+            scrollToTower((current + 1) % skylineTowers.length);
+          }}
           aria-label="Next building"
         >
           →
         </button>
       </div>
 
-      {/* SVG Badal: Realistic Layered Mountain Clouds & Mist - Light, ethereal, and seamlessly wide */}
+      {/* SVG Clouds: Realistic Layered Mountain Clouds & Mist - Light, ethereal, and seamlessly wide */}
       {/* <div className="pj-clouds-container" aria-hidden="true">
         <svg className="pj-cloud-filter-def" width="0" height="0">
           <defs>

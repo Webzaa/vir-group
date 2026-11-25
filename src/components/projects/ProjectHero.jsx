@@ -69,7 +69,7 @@ export function ProjectHero({ p, status, config }) {
             Schedule site visit
           </Button>
           {p.brochureUrl ? (
-            <Button href={p.brochureUrl} variant="ghost" event="brochure_download">
+            <Button href={p.brochureUrl} variant="ghost" event="brochure_download" download={`${p.name || 'Project'} Brochure.pdf`}>
               Download brochure
             </Button>
           ) : (

@@ -14,7 +14,7 @@ export function RootLayout() {
   const loaderData = useLoaderData();
   const { pathname } = useLocation();
   const cleanPath = (pathname || '').replace(/\/+$/, '');
-  const isHomePage = cleanPath === '' || cleanPath === '/' || cleanPath === '/vir-group' || cleanPath === '/virgroup' || cleanPath === '/vir-groupv3' || cleanPath === '/vir-groupv7';
+  const isHomePage = cleanPath === '' || cleanPath === '/' || cleanPath === '/vir-group' || cleanPath === '/virgroup' || cleanPath === '/vir-groupv3' || cleanPath === '/vir-groupv10';
 
   const company = loaderData?.company ?? {
     phone: '',

@@ -1,0 +1,11 @@
+export { Hero } from './Hero';
+export { Achievements } from './Achievements';
+export { BrandStatement } from './BrandStatement';
+export { LegacyBackdrop } from './LegacyBackdrop';
+export { Story } from './Story';
+export { ProjectsShowcase } from './ProjectsShowcase';
+export { MumbaiMapSection } from './MumbaiMapSection';
+export { ValuesWePreserve } from './ValuesWePreserve';
+export { Testimonial } from './Testimonial';
+export { Founder } from './Founder';
+export { HomeFinalCta } from './HomeFinalCta';
